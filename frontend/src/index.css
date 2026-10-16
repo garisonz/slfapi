@@ -1,1 +1,37 @@
 @import "tailwindcss";
+
+body { margin: 0; font-family: system-ui, sans-serif; background: #f6f7f9; color: #17212f; }
+main { max-width: 48rem; margin: 2rem auto; padding: 2rem; background: white; border: 1px solid #ddd; border-radius: .5rem; }
+h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; }
+h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; }
+form { display: grid; gap: .75rem; }
+input { border: 1px solid #999; border-radius: .25rem; padding: .5rem; width: 100%; }
+button { border: 1px solid #777; border-radius: .25rem; padding: .5rem .75rem; cursor: pointer; }
+button[type="submit"] { background: #17212f; color: white; }
+button:disabled { opacity: .6; cursor: wait; }
+section p { margin-bottom: 1rem; }
+[role="alert"] { color: #a01919; margin-top: 1rem; }
+
+a { color: #2157a3; text-decoration: underline; text-underline-offset: .2em; }
+a:hover { color: #173b70; }
+:is(a, button, input):focus-visible { outline: 3px solid #5184cb; outline-offset: 3px; }
+.app-header { padding: 1rem 2rem; background: white; border-bottom: 1px solid #ddd; }
+.navbar { max-width: 48rem; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; }
+.brand { color: #17212f; font-weight: 700; text-decoration: none; }
+.nav-links { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; }
+.nav-links a[aria-current="page"] { font-weight: 700; }
+.nav-error { max-width: 48rem; margin: 1rem auto 0; }
+.auth-page { max-width: 26rem; margin: 0 auto; }
+.auth-page .form-hint { color: #475569; font-size: .875rem; margin: 0; }
+.auth-page .form-footer { margin: .5rem 0 0; }
+form [role="alert"] { margin: 0; }
+.account-details { display: grid; gap: 1rem; }
+.account-details div { border-top: 1px solid #ddd; padding-top: 1rem; }
+.account-details dt { font-weight: 600; margin-bottom: .25rem; }
+.account-details dd, .account-email { overflow-wrap: anywhere; }
+@media (max-width: 40rem) {
+  .app-header { padding: 1rem; }
+  main { margin: 1rem; padding: 1.25rem; }
+  .navbar { align-items: flex-start; }
+  .nav-links { gap: .75rem; }
+}

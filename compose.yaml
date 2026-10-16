@@ -1,0 +1,44 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: slfapi
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-slfapi}
+      POSTGRES_DB: slfapi
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U slfapi -d slfapi"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  migrate:
+    build:
+      context: .
+      target: final
+    environment:
+      DATABASE_URL: postgresql+psycopg://slfapi:${POSTGRES_PASSWORD:-slfapi}@db:5432/slfapi
+    command: ["alembic", "upgrade", "head"]
+    depends_on:
+      db:
+        condition: service_healthy
+
+  app:
+    build:
+      context: .
+      target: final
+    environment:
+      DATABASE_URL: postgresql+psycopg://slfapi:${POSTGRES_PASSWORD:-slfapi}@db:5432/slfapi
+      SESSION_HOURS: ${SESSION_HOURS:-24}
+      CORS_ORIGINS: ${CORS_ORIGINS:-["http://localhost:5173","http://127.0.0.1:5173"]}
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+volumes:
+  db-data:

@@ -1,25 +1,36 @@
-import { useEffect, useState } from "react";
+import { Link, Navigate, Route, Routes } from "react-router";
+import { useAuth } from "./auth/AuthContext";
+import { ProtectedRoute } from "./auth/ProtectedRoute";
+import Navbar from "./components/Navbar";
+import AccountPage from "./pages/AccountPage";
+import DashboardPage from "./pages/DashboardPage";
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
 
 function App() {
-  const [message, setMessage] = useState("Loading...");
-
-  useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/v1/hello")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Backend request failed");
-        }
-        return response.json();
-      })
-      .then((data) => setMessage(data.message))
-      .catch(() => setMessage("Backend connection failed"));
-  }, []);
+  const { user } = useAuth();
 
   return (
-    <main>
-      <h1>SELF API</h1>
-      <p>{message}</p>
-    </main>
+    <>
+      <Navbar />
+      <main>
+        <Routes>
+          <Route path="/" element={<Navigate to={user ? "/dashboard" : "/login"} replace />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/account" element={<AccountPage />} />
+          </Route>
+          <Route path="*" element={
+            <section>
+              <h1>Page not found</h1>
+              <Link to={user ? "/dashboard" : "/login"}>Go to your home page</Link>
+            </section>
+          } />
+        </Routes>
+      </main>
+    </>
   );
 }
 
